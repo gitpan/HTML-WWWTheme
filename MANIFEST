@@ -1,0 +1,11 @@
+Changes
+MANIFEST
+Makefile.PL
+WWWTheme.pm
+t/headertest.t
+blank.gif
+README
+LICENSE
+gpl.txt
+templates/Configuration
+templates/LookAndFeelConfig

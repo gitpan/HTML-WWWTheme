@@ -1,0 +1,15 @@
+Revision history for Perl extension HTML::WWWTheme.
+
+1.00  Fri Aug 13 11:41:58 1999
+	- original version; created by h2xs 1.18
+
+	Based on the module used at the Joint Astronomy Centre and
+	developed by Chad Hogan.  This module was released under
+	the GNU Public License:  See LICENSE and gpl.txt for more
+	details.
+
+1.02  Thu Sep 16 18:46:52 1999
+
+	-release version, with trivial corrections.
+	-all sorts of minor cosmetic stuff, including adding templates,
+	 and fixing ambiguities in the documentation.
