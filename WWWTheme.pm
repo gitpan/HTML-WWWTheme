@@ -29,7 +29,7 @@ use Carp;
 
 use vars qw($VERSION);
 
-$VERSION = '1.04';
+$VERSION = '1.05';
 
 # You're going to notice that $self->{"link"} is in quotation marks.
 # that's because I get an ambiguity error if I use it.  So, I made
@@ -65,6 +65,8 @@ sub new {
 	      startstring       => "<HTML><HEAD><TITLE>Nothing</TITLE></HEAD>",
 	      endstring         => "</HTML>",
 	      searchtemplate    => "",
+	      printablename     => "",
+
 	     }; 
   my $config; 
   
@@ -281,7 +283,9 @@ sub MakeFooter
     my $self = shift;
     my $endbody;
     $endbody  = "</TD></TABLE></TD></TR></TABLE>";
-    $endbody .= '<DIV ALIGN="right"><H6><A HREF="#top">return to top...</a></h6></div>';
+    $endbody .= '<DIV ALIGN="left"><H6><A HREF=' . $self->{printablename};
+    $endbody .= ">click here for a printable version...</A></H6></DIV>";
+    $endbody .= '<DIV ALIGN="right"><H6><A HREF="#top">return to top...</A></H6></DIV>';
     $endbody .= "</BODY>";
     
     return $endbody;
@@ -355,60 +359,67 @@ sub SetBlankGif
   }
 
 sub SetNextLink
-{
+  {
     my $self = shift;
     $self->{nextlink} = shift if (@_);
     return $self->{nextlink};
-}
+  }
 
 sub SetLastLink
-{
+  {
     my $self = shift;
     $self->{lastlink} = shift if (@_);
     return $self->{lastlink};
-}
+  }
+
+sub SetPrintableName
+  {
+    my $self = shift;
+    $self->{printablename} = shift if (@_);
+    return $self->{printablename};
+  }
 
 sub SetUpLink
-{
+  {
     my $self = shift;
     $self->{uplink} = shift if (@_);
     return $self->{uplink};
-}
+  }
 
 sub SetBGColor
-{
+  {
     my $self = shift;
     $self->{bgcolor} = shift if (@_);
     return $self->{bgcolor};
-}
+  }
 
 sub SetBGPicture
-{
+  {
     my $self = shift;
     $self->{bgpicture} = shift if (@_);
     return $self->{bgpicture}
-}
+  }
 
 sub SetALink
-{
+  {
     my $self = shift;
     $self->{alink} = shift if (@_);
     return $self->{alink};
-}
+  }
 
 sub SetLink
-{
+  {
     my $self = shift;
     $self->{link} = shift if (@_);
     return $self->{link};
-}
+  }
 
 sub SetVLink
-{
+  {
     my $self = shift;
     $self->{vlink} = shift if (@_);
     return $self->{vlink};
-}
+  }
 
 sub SetMoreLinksTitle
   {
@@ -692,6 +703,17 @@ Sets the HTML ending string.  This string should contain everything after the
 </BODY> tag, including such things as </HTML>.
 
  $Theme->SetHTMLEndString("</HTML>");
+
+=item SetPrintableName()
+
+Sets the URL that is used to produce a printable version of the
+page.  This is used to generate the small "click here to produce a printable
+version" link on the themed page.  How this is implemented is left to the caller.
+Apache::SetWWWTheme produces an un-themed page, with all the link tags stripped
+out to discourage people from browsing in the printable pages and thus subverting
+the theming.
+
+ $Theme->SetPrintableName("/printable/path/to/file.html");
 
 =item SetText()
 

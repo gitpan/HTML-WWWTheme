@@ -5,6 +5,7 @@ WWWTheme.pm
 t/headertest.t
 t/navbartest.t
 t/topbottomtest.t
+t/footertest.t
 blank.gif
 README
 LICENSE

@@ -25,3 +25,8 @@ Revision history for Perl extension HTML::WWWTheme.
 	
 	-added top and bottom navigation bars at the request of the 
 	 JAC.
+
+1.05  Mon Feb 14 17:07:12 2000
+	
+	-added support for the "printable version" link at the bottom
+	 of the page.
