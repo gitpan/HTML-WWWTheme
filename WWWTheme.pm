@@ -29,7 +29,7 @@ use Carp;
 
 use vars qw($VERSION);
 
-$VERSION = '1.03';
+$VERSION = '1.04';
 
 # You're going to notice that $self->{"link"} is in quotation marks.
 # that's because I get an ambiguity error if I use it.  So, I made
@@ -42,7 +42,9 @@ sub new {
 	      nextlink          => "",
               lastlink          => "",
               uplink            => "",
-	      
+
+	      topbottomlinks    => [],
+
 	      bgcolor           => "#FFFFFF",
 	      bgpicture         => "",
 	      alink             => "",
@@ -251,6 +253,24 @@ sub MakeNavBar
 
 ##############################################################################
 #
+# This creates the navigation bar to be found at the top and bottom of the 
+# page.  It's usually called directly (eg. Apache::SetWWWTheme calls it directly)
+
+sub MakeTopBottomBar
+  {
+    my $self = shift;
+    return '' unless (@{$self->{topbottomlinks}});
+    my $bar = "<!-- Beginning of top/bottom bar -->\n<CENTER>";
+    foreach my $link (@{$self->{topbottomlinks}})
+      {
+	$bar .= "$link<BR>";
+      }
+    $bar .= "</CENTER>\n<!-- End of top/bottom bar -->";
+    return $bar;
+  }
+
+##############################################################################
+#
 # This footer must always be used, since it closes off all the table stuff
 # that we created in the MakeHeader.  It really doesn't do much else, except
 # it throws in the "return to top...." bit.  
@@ -437,6 +457,13 @@ sub SetSideBarMenuLinks
     my $self = shift;
     $self->{sidebarmenulinks} = shift if (@_);
     return $self->{sidebarmenulinks};
+  }
+
+sub SetTopBottomLinks
+  {
+    my $self = shift;
+    $self->{topbottomlinks} = shift if (@_);
+    return $self->{topbottomlinks};
   }
 
 sub SetUseNavBar
@@ -756,6 +783,13 @@ the values set in the Set__Link() methods.
 
  $Theme->SetUseNavBar("1");
 
+=item SetTopBottomLinks()
+
+Sets the links used in the top/bottom link bars.  It takes an array reference as data.
+
+ @array = ('<a href="here.html">here</a>', '<a href="there.html">there</a>');
+ $Theme->SetTopBottomLinks(\@array);
+
 =item StartHTML()
 
 Returns the contents of the string set in SetHTMLStartString.  This is mostly just a placeholder
@@ -799,9 +833,11 @@ E<lt>/BODYE<gt> tags.:
  # make the header, navbar, body, navbar, footer.  
  print $Theme->StartHTML();
  print $Theme->MakeHeader();
+ print $Theme->MakeTopBottomBar();
  print $Theme->MakeNavBar();
  print "This is the body of my file.  Isn't it groovy?";
  print $Theme->MakeNavBar();
+ print $Theme->MakeTopBottomBar();
  print $Theme->MakeFooter();
  print $Theme->EndHTML();
  exit 0;

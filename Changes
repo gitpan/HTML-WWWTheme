@@ -20,3 +20,8 @@ Revision history for Perl extension HTML::WWWTheme.
 	 @MORELINKSTITLE directive in the config files.  Added at the
 	 request of Chris Davis at JACH.  
 	-integrated some cleanups.
+
+1.04  Mon Jan 31 12:35:11 2000
+	
+	-added top and bottom navigation bars at the request of the 
+	 JAC.

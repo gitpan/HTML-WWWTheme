@@ -3,6 +3,8 @@ MANIFEST
 Makefile.PL
 WWWTheme.pm
 t/headertest.t
+t/navbartest.t
+t/topbottomtest.t
 blank.gif
 README
 LICENSE
