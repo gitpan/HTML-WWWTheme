@@ -13,3 +13,10 @@ Revision history for Perl extension HTML::WWWTheme.
 	-release version, with trivial corrections.
 	-all sorts of minor cosmetic stuff, including adding templates,
 	 and fixing ambiguities in the documentation.
+
+1.03  Sun Jan 30 22:33:21 2000
+
+	-added support for SetMoreLinksTitle(), which supports the 
+	 @MORELINKSTITLE directive in the config files.  Added at the
+	 request of Chris Davis at JACH.  
+	-integrated some cleanups.

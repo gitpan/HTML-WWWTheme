@@ -6,5 +6,5 @@ WriteMakefile(
     'VERSION_FROM' => 'WWWTheme.pm', # finds $VERSION
     ($] >= 5.005 ?    ## Add these new keywords supported since 5.005
     ('ABSTRACT_FROM' => 'WWWTheme.pm',
-    'AUTHOR' => 'Chad Hogan <chogan@uvphys.phys.uvic.ca>') : ()),
+    'AUTHOR' => 'Chad Hogan <chogan@uvastro.phys.uvic.ca>') : ()),
 );
