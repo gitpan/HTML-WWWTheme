@@ -30,3 +30,9 @@ Revision history for Perl extension HTML::WWWTheme.
 	
 	-added support for the "printable version" link at the bottom
 	 of the page.
+
+1.06  Fri Mar 24 09:51:33 2000
+
+	-added support for setting width of sidebar
+	-added support for toggling sidebar extras
+        -added support for escaped semi-colons. (ie \; -> ;)

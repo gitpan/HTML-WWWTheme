@@ -29,7 +29,7 @@ use Carp;
 
 use vars qw($VERSION);
 
-$VERSION = '1.05';
+$VERSION = '1.06';
 
 # You're going to notice that $self->{"link"} is in quotation marks.
 # that's because I get an ambiguity error if I use it.  So, I made
@@ -59,6 +59,9 @@ sub new {
               sidebarmenutitle  => "My Divisions",
               sidebarsearchbox  => "0", 
               sidebarmenulinks  => [],
+	      sidebarwidth      => "150",
+              shortwidth        => "120",
+	      nosidebarextras   => "",
 	      morelinkstitle    => "More links",
 	      usenavbar         => "", 
 	      configfile        => "", 
@@ -130,7 +133,7 @@ see the source code for details.
 	<!--end of the gutter-->
 	
 	<!--beginning of the sidebar element-->
-	<TD width="150">
+	<TD width="} . $self->{sidebarwidth} . q{">
 	  <IMG SRC="} . $self->{blankgif} . q{" alt="" width="1" height="1" vspace="5"><BR>
 	  <B><A NAME="top"></a>} . $self->{sidebartop} . q{</B><BR>
 	  <HR> 
@@ -143,29 +146,33 @@ see the source code for details.
 	  <TABLE CELLSPACING="0" CELLPADDING="0">
 	    <TR>
 	      <TD WIDTH="5"><IMG SRC="} . $self->{blankgif} . q{" ALT="" WIDTH="5" HEIGHT="1" VSPACE="3"></TD>
-	      <TD WIDTH="120">
+	      <TD WIDTH="} . $self->{shortwidth} . q{">
 		<FONT SIZE="-1" FACE="TIMES NEW ROMAN, TIMES ROMAN, TIMES, SERIF">
-		  <IMG SRC="} . $self->{blankgif} . q{" ALT="" WIDTH="120" HEIGHT="1" VSPACE="3"><BR>} . 
-		   MakeSideBarMenuLinks($self) . q{
+		  <IMG SRC="} . $self->{blankgif} . q{" ALT="" WIDTH="} . $self->{shortwidth} . 
+                     q{" HEIGHT="1" VSPACE="3"><BR>} . MakeSideBarMenuLinks($self) . q{
 		</FONT>
 	      </TD>
 	    </TR>
-	  </TABLE>
-   <!--a spacer-->
-	  <IMG SRC="} . $self->{blankgif} . q{" alt="" width="1" height="1" vspace="17"><BR>
-
-	  <B>} . $self->{morelinkstitle} . q{</B><BR><HR>
-	  
+	  </TABLE>};
  
-	  <TABLE CELLSPACING="0" CELLPADDING="0">
+   # now, unless we've set the "nosidebarextras" bit, we'll add in the other pieces of the sidebar.
+   # including "more links" and the search bar.
+ 
+   unless ($self->{nosidebarextras})
+     {
+       $navbar .= q{<!--a spacer-->
+	  <IMG SRC="} . $self->{blankgif} . q{" alt="" width="1" height="1" vspace="17"><BR>
+          <B>} . $self->{morelinkstitle} . q{</B><BR>
+          <HR>
+      	  <TABLE CELLSPACING="0" CELLPADDING="0">
 	    <TR>
-	      <TD WIDTH="5"><IMG SRC="} . $self->{blankgif} . q{" ALT="" WIDTH="5" HEIGHT="1" VSPACE="3"></TD>
-	      <TD WIDTH="120">
+	      <TD WIDTH="5"><IMG SRC="} . $self->{blankgif} . q{" ALT="" WIDTH="5" HEIGHT="1" VSPACE="3">
+              </TD>
+	      <TD WIDTH="} . $self->{shortwidth} . q{">
 		<FONT SIZE="-1" FACE="TIMES NEW ROMAN, TIMES ROMAN, TIMES, SERIF">} . 
-		  join ("<IMG SRC=\"".$self->{blankgif}."\" ALT=\"\" 
-                     WIDTH=\"120\" HEIGHT=\"1\" VSPACE=\"3\"><BR>",@{$self->{infolinks}}) . q{
-	      
-		 <BR>
+		  join ("<IMG SRC=\"" . $self->{blankgif} . "\" ALT=\"\" WIDTH=\"" . 
+                        $self->{shortwidth} . "\" HEIGHT=\"1\" VSPACE=\"3\"><BR>" , @{$self->{infolinks}}) 
+              . q{<BR>
 		  
 		</FONT>
 	      </TD>
@@ -174,11 +181,16 @@ see the source code for details.
 
 	   <!--a spacer-->
 	  <IMG SRC="} . $self->{blankgif} . q{" alt="" width="1" height="1" vspace="17"><BR>} .
-	    MakeSearchBox($self) . q{
-	</TD>
+	    MakeSearchBox($self);
+     }  # end of the conditional addition of the sidebar extras!  yeah, I know, it's a mess.
+
+   # Now we have to close everything off nicely.  This part must be added in every case.
+
+   $navbar .= q{
+        </TD>
        </TABLE>
-       </TD>
-	<!--That was the end of the sidebar element-->
+      </TD>
+       <!--That was the end of the sidebar element-->
 	  <TD>
 	    <TABLE background="" Cellspacing="0" cellpadding="0">
 	      <TD WIDTH="25">
@@ -189,11 +201,9 @@ see the source code for details.
 	      <!-- Now we make a table element for the real text!-->
 	     <TD>
 
-<!-- END OF GENERATED HTML
-**********************************************************
-
--->
-};  # end the the $navbar string
+	       <!-- END OF GENERATED HTML
+		 **********************************************************  
+		   -->};  # end of the $navbar string
 
     return $navbar;
 
@@ -332,6 +342,10 @@ sub GetConfiguration
 	    ( /\@SEARCHTEMPLATE\s*?=\s*?(.*?);/s )   && ($self->{searchtemplate}   = $1);
 	    ( /\@SIDEBARSEARCHBOX\s*?=\s*?(.*?);/s ) && ($self->{sidebarsearchbox} = $1);
 	    ( /\@SIDEBARCOLOR\s*?=\s*?(.*?);/s )     && ($self->{sidebarcolor}     = $1);
+	    ( /\@SIDEBARWIDTH\s*?=\s*?(.*?);/s )     && ($self->{sidebarwidth}     = $1);
+
+	    ( /\@NOSIDEBAREXTRAS\s*?=\s*?(.*?);/s)   && ($self->{nosidebarextras}  = $1);
+
 	    my (@links, @sides);
 	    ( /\@INFO\s*?=\s*?(.*?);/s )             && (@links = split(',',$1)) && ($self->{infolinks} = \@links);	   
 	    ( /\@SIDEBARMENULINKS\s*?=\s*?(.*?);/s ) && (@sides = split(',',$1)) && ($self->{sidebarmenulinks} = \@sides);
@@ -340,7 +354,7 @@ sub GetConfiguration
     close CONFIG;
     return 1;
   } #GetConfiguration
-
+		      
 ##############################
 # all of my mutator methods.
 
@@ -456,6 +470,23 @@ sub SetSideBarColor
     return $self->{sidebarcolor};
   }
 
+sub SetSideBarWidth
+  {
+    my $self = shift;
+    $self->{sidebarwidth} = shift if (@_);
+    $self->{shortwidth} = $self->{sidebarwidth} - 30;
+    ($self->{shortwidth} < 0) && ($self->{shortwidth} = 0); 
+    return $self->{sidebarwidth};
+  }
+
+sub SetNoSideBarExtras
+  {
+    my $self = shift;
+    $self->{nosidebarextras} = shift if (@_);
+    return $self->{nosidebarextras};
+  }
+
+
 sub SetInfoLinks
   {
     my $self = shift;
@@ -564,9 +595,14 @@ for example,
  @BGCOLOR=#FFFFFF;
 
 or, in the case of a directive that accepts a list, the values are comma-separated and 
-semi-colon terminated.
+semi-colon terminated.  Escaped semi-colons will be transformed into semi-colons, and
+will not terminate the directive.
 
  @DIRECTIVE=value1, value2, value3;
+
+ @DIRECTIVE=value1, value2\; still going, value3;
+
+In the second example, the value2\; will be replaced with value2; in the parsed text.
 
 for example,
 
@@ -617,6 +653,8 @@ the same method:
  @SIDEBARMENUTITLE  (see SetSidebarMenuTitle() )
  @SIDEBARSEARCHBOX  (see SetSideBarSearchBox() )
  @SIDEBARCOLOR      (see SetSideBarColor() )
+ @SIDEBARWIDTH      (see SetSideBarWidth() )
+ @NOSIDEBAREXTRAS   (see SetNoSideBarExtras() )
  @MORELINKSTITLE    (see SetMoreLinksTitle() )
  @INFO              (see SetInfoLinks() )
  @SIDEBARMENULINKS  (see SetSideBarMenuLinks() )
@@ -688,6 +726,13 @@ links", but you may want to change it something else.
 
  $Theme->SetMoreLinksTitle("More useful links");
 
+=item SetNoSideBarExtras()
+
+If this is true, it turns off the sidebar extras -- those parts of the 
+sidebar that aren't in the "SidebarMenuLinks" bit.
+
+ $Theme->SetNoSideBarExtras("1");
+
 =item SetHTMLStartString()
 
 Sets the HTML starting string.  This string should include the <HTML> opening tag,
@@ -728,6 +773,12 @@ Sets the color of the generated sidebar.  Valid entries must be in the form of a
 color code.  
 
  $Theme->SetSideBarColor("#FFCCFF");
+
+=item SetSideBarWidth()
+
+Sets the width of the sidebar in pixels.  The default is 150.
+
+ $Theme->SetSideBarWidth("120");
 
 =item SetBlankGif()
 
